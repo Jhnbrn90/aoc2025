@@ -77,3 +77,25 @@ def test_turn_dial_string_input():
     vault_dial.turn('L15')
     assert vault_dial.current_position == 0
 
+
+def test_turn_dial_multiple_string_sequence():
+    # Given that we have a vault dial
+    vault_dial = VaultDial(15)
+
+    # When we provide a series of instructions
+    instructions = [
+        'L15',  # 0
+        'R12',  # 12
+        'R3',  # 15
+        'L2',  # 13
+    ]
+
+    vault_dial.turn_sequence(instructions)
+
+    assert vault_dial.current_position == 13
+    assert vault_dial.recorded_stops == [
+        0,
+        12,
+        15,
+        13,
+    ]

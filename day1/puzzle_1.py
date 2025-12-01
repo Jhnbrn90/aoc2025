@@ -21,6 +21,10 @@ class VaultDial:
         distance_with_direction = parse_instruction(instruction)
         self.update_position(distance_with_direction)
 
+    def turn_sequence(self, instructions: list[str]):
+        for instruction in instructions:
+            self.turn(instruction)
+
     def turn_right(self, distance: int):
         self.update_position(distance)
 
@@ -37,4 +41,3 @@ class VaultDial:
 
         self.current_position = new_position
         self.recorded_stops.append(new_position)
-

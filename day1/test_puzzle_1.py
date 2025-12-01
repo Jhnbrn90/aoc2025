@@ -1,4 +1,4 @@
-from puzzle_1 import VaultDial
+from puzzle_1 import VaultDial, parse_instruction
 
 
 def test_vault_dial_initial_position():
@@ -61,3 +61,19 @@ def test_vault_dial_record_passed_numbers():
 
     # It should have recorded all values it stopped at
     assert vault_dial.recorded_stops == [14, 24, 99]
+
+
+def test_parse_instruction_string():
+    instruction_str_left = 'L86'
+    instruction_str_right = 'R100'
+
+    assert parse_instruction(instruction_str_left) == -86
+    assert parse_instruction(instruction_str_right) == 100
+
+
+def test_turn_dial_string_input():
+    # Given that we have a vault dial
+    vault_dial = VaultDial(15)
+    vault_dial.turn('L15')
+    assert vault_dial.current_position == 0
+

@@ -1,3 +1,12 @@
+def parse_instruction(instruction: str) -> int:
+    # Replace all 'L' characters with a '-' sign
+    # Replace all 'R' characters with a '+' sign
+    replaced_str = instruction.replace('L', '-').replace('R', '+')
+
+    # Cast string e.g. '-20' to int: -20
+    return int(replaced_str)
+
+
 class VaultDial:
     def __init__(self, initial_position: int = 50):
         self.current_position = initial_position
@@ -7,6 +16,10 @@ class VaultDial:
             range(self.start, self.end + 1)  # range() is exclusive of highest
         )
         self.recorded_stops: list[int] = []
+
+    def turn(self, instruction: str):
+        distance_with_direction = parse_instruction(instruction)
+        self.update_position(distance_with_direction)
 
     def turn_right(self, distance: int):
         self.update_position(distance)

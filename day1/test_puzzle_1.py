@@ -99,3 +99,28 @@ def test_turn_dial_multiple_string_sequence():
         15,
         13,
     ]
+
+
+def test_parse_sample_input():
+    with open('day1/sample_input.txt') as f:
+        puzzle_input = [line for line in f.read().split('\n') if line != '']
+
+    vault_dial = VaultDial(50)
+    vault_dial.turn_sequence(puzzle_input)
+
+    assert vault_dial.recorded_stops == [
+        82,
+        52,
+        0,
+        95,
+        55,
+        0,
+        99,
+        0,
+        14,
+        32,
+    ]
+
+    # The number of zero's in the recorded numbers
+    # the dial stopped at, i.e. 'the password'
+    assert vault_dial.recorded_stops.count(0) == 3

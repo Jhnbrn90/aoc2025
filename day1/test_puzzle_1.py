@@ -18,3 +18,11 @@ def test_vault_dial_turn_right():
 
     vault_dial.turn_right(10)
     assert vault_dial.current_position == 10
+
+
+def test_vault_dial_turn_left():
+    vault_dial = VaultDial(20)
+    assert vault_dial.current_position == 20
+
+    vault_dial.turn_left(5)
+    assert vault_dial.current_position == 15

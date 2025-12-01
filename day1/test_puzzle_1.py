@@ -37,3 +37,14 @@ def test_vault_dial_turn_right_overflow():
 
     # The vault dial should wrap around
     assert vault_dial.current_position == 0
+
+
+def test_vault_dial_turn_left_overflow():
+    # Given that we are at the highest number of the dial
+    vault_dial = VaultDial(0)
+
+    # When we turn right by a distance of one
+    vault_dial.turn_left(1)
+
+    # The vault dial should wrap around
+    assert vault_dial.current_position == 99

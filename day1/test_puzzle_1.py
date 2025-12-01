@@ -48,3 +48,17 @@ def test_vault_dial_turn_left_overflow():
 
     # The vault dial should wrap around
     assert vault_dial.current_position == 99
+
+
+def test_vault_dial_record_passed_numbers():
+    # Given that we have a vault dial
+    vault_dial = VaultDial(15)
+
+    # When we turn it left and right a couple of times
+    vault_dial.turn_left(1)  # 14
+    vault_dial.turn_right(10)  # 24
+    vault_dial.turn_left(25)  # 99
+
+    # It should have recorded all values it stopped at
+    assert vault_dial.recorded_stops == [14, 24, 99]
+

@@ -6,6 +6,7 @@ class VaultDial:
         self.number_of_dials = len(
             range(self.start, self.end + 1)  # range() is exclusive of highest
         )
+        self.recorded_stops: list[int] = []
 
     def turn_right(self, distance: int):
         self.update_position(distance)
@@ -22,3 +23,5 @@ class VaultDial:
             new_position = new_position % self.number_of_dials
 
         self.current_position = new_position
+        self.recorded_stops.append(new_position)
+

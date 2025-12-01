@@ -61,4 +61,3 @@ def test_vault_dial_record_passed_numbers():
 
     # It should have recorded all values it stopped at
     assert vault_dial.recorded_stops == [14, 24, 99]
-

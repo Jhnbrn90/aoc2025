@@ -67,8 +67,8 @@ def test_parse_instruction_string():
     instruction_str_left = 'L86'
     instruction_str_right = 'R100'
 
-    assert parse_instruction(instruction_str_left) == -86
-    assert parse_instruction(instruction_str_right) == 100
+    assert parse_instruction(instruction_str_left) == ('L', 86)
+    assert parse_instruction(instruction_str_right) == ('R', 100)
 
 
 def test_turn_dial_string_input():

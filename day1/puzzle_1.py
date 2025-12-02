@@ -1,10 +1,5 @@
-def parse_instruction(instruction: str) -> int:
-    # Replace all 'L' characters with a '-' sign
-    # Replace all 'R' characters with a '+' sign
-    replaced_str = instruction.replace('L', '-').replace('R', '+')
-
-    # Cast string e.g. '-20' to int: -20
-    return int(replaced_str)
+def parse_instruction(instruction: str) -> tuple[str, int]:
+    return instruction[0], int(instruction[1:])
 
 
 class VaultDial:
@@ -18,8 +13,11 @@ class VaultDial:
         self.recorded_stops: list[int] = []
 
     def turn(self, instruction: str):
-        distance_with_direction = parse_instruction(instruction)
-        self.update_position(distance_with_direction)
+        direction, distance = parse_instruction(instruction)
+        match direction:
+            case 'L': self.turn_left(distance)
+            case 'R': self.turn_right(distance)
+            case _: raise ValueError(f'Unknown direction: {direction}.')
 
     def turn_sequence(self, instructions: list[str]):
         for instruction in instructions:

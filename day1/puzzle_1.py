@@ -28,6 +28,10 @@ class VaultDial:
         new_position_sum = self.current_position + distance
         new_position = new_position_sum % self.number_of_dials
 
+        # Given we start at '99' and move  'R1', the new accumulated
+        # position is '100', which is divisible by the number of dials
+        # exactly once.
+        # Starting at '0' and moving 'R100' also yields position '100'.
         self.passed_zeros += new_position_sum // self.number_of_dials
 
         self.current_position = new_position
@@ -37,14 +41,24 @@ class VaultDial:
         new_position_sum = self.current_position - distance
         new_position = new_position_sum % self.number_of_dials
 
+
+        # Scenario 1 - The starting position is '0'
         if self.current_position == 0:
             self.passed_zeros += distance // self.number_of_dials
-        elif distance > self.current_position:
-            # We pass 0 along the way
-            self.passed_zeros += ((distance - self.current_position - 1) // self.number_of_dials) + 1
 
-            if new_position == 0:
+        # Scenario 2 - The distance is larger than the starting position
+        elif distance > self.current_position:
+            self.passed_zeros += 1  # account for the first time passing 0
+
+            self.passed_zeros += (distance // self.number_of_dials) - 1  # don't count initial pass twice
+
+            # Account for the fact that we might have a remaining distance after the round trips
+            # which might cause the dial to pass 0 once more
+            remainder_distance_after_revelations = distance % self.number_of_dials
+            if remainder_distance_after_revelations >= self.current_position:  # >= to account landing at 0
                 self.passed_zeros += 1
+
+        # Scenario 3 - The distance we travel back is equal to the current position, ending at 0
         elif distance == self.current_position:
             # We land at 0
             self.passed_zeros += 1

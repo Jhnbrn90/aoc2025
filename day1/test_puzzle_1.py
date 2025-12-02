@@ -132,9 +132,19 @@ def test_parse_sample_input():
 @pytest.mark.parametrize('initial_position,instruction,expected_zeros', [
     (50, 'R1000', 10),
     (0, 'R100', 1),
+    (0, 'R99', 0),
+    (1, 'R99', 1),
     (99, 'L99', 1),
     (50, 'L1000', 10),
     (50, 'R93', 1),
+    (3, 'L1', 0),
+    (3, 'L3', 1),
+    (3, 'L4', 1),
+    (3, 'L100', 1),
+    (3, 'L103', 2),
+    (3, 'L104', 2),
+    (3, 'L200', 2),
+    (3, 'L204', 3),
 ])
 def test_vault_dial_count_passing_zero(initial_position, instruction, expected_zeros):
     vault_dial = VaultDial(initial_position)

@@ -8,8 +8,10 @@ def main():
     vault_dial.turn_sequence(puzzle_input)
 
     stopped_at_zero = vault_dial.recorded_stops.count(0)
+    passed_zero = vault_dial.passed_zeros
 
     print(f"The dial stopped at 0 this many times: {stopped_at_zero}")
+    print(f"The dial passed 0 this many times: {passed_zero}")
 
 
 if __name__ == "__main__":

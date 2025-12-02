@@ -1,3 +1,5 @@
+import pytest
+
 from puzzle_1 import VaultDial, parse_instruction
 
 
@@ -124,3 +126,18 @@ def test_parse_sample_input():
     # The number of zero's in the recorded numbers
     # the dial stopped at, i.e. 'the password'
     assert vault_dial.recorded_stops.count(0) == 3
+    assert vault_dial.passed_zeros == 6
+
+
+@pytest.mark.parametrize('initial_position,instruction,expected_zeros', [
+    (50, 'R1000', 10),
+    (0, 'R100', 1),
+    (99, 'L99', 1),
+    (50, 'L1000', 10),
+    (50, 'R93', 1),
+])
+def test_vault_dial_count_passing_zero(initial_position, instruction, expected_zeros):
+    vault_dial = VaultDial(initial_position)
+    vault_dial.turn(instruction)
+
+    assert vault_dial.passed_zeros == expected_zeros

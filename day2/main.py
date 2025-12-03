@@ -1,4 +1,5 @@
-from puzzle_1 import get_invalid_ids_from_range
+# from puzzle_1 import get_invalid_ids_from_range
+from puzzle_2 import get_invalid_ids_from_range
 
 
 def main():
@@ -14,7 +15,7 @@ def main():
         )
 
     sum_of_invalid_ids = sum(invalid_ids)
-    
+
     print(f"The sum of invalid ID's is: {sum_of_invalid_ids}")
 
 

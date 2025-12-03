@@ -1,6 +1,31 @@
 import pytest
 
-from puzzle_2 import get_invalid_ids_from_range
+from puzzle_2 import (
+    get_prime_factors,
+    get_invalid_ids_from_range,
+    single_digit_repeat,
+)
+
+
+@pytest.mark.parametrize('input_id,is_repeated', [
+    ('99', True),
+    ('999', True),
+    ('111', True),
+    ('11', True),
+    ('22222222222', True),
+    ('333333', True),
+    ('4444', True),
+    ('4', False),
+    ('1010', False),
+])
+def test_single_digit_repeat(input_id: str, is_repeated: bool):
+    """Check it can determine if ID has single repeated digit."""
+    assert single_digit_repeat(input_id) is is_repeated
+
+
+def test_group_sizes():
+    result = get_prime_factors(6)
+    assert result == {2, 3}
 
 
 @pytest.mark.parametrize('input_range,expected_invalid_ids', [

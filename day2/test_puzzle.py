@@ -16,3 +16,29 @@ from puzzle import get_invalid_ids_from_range
 def test_get_invalid_ids_for_range(input_range, expected_invalid_ids):
     result = get_invalid_ids_from_range(input_range)
     assert result == expected_invalid_ids
+
+
+def test_parse_input_ids():
+    with open('day2/sample_input.txt') as f:
+        puzzle_input = f.read()
+
+    input_id_ranges = puzzle_input.split(',')
+
+    invalid_ids = []
+    for id_range in  input_id_ranges:
+        invalid_ids.extend(
+            get_invalid_ids_from_range(id_range)
+        )
+
+    assert invalid_ids == [
+        11,
+        22,
+        99,
+        1010,
+        1188511885,
+        222222,
+        446446,
+        38593859,
+    ]
+
+    assert sum(invalid_ids) == 1227775554

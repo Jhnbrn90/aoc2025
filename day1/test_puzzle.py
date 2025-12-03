@@ -1,6 +1,6 @@
 import pytest
 
-from puzzle_1 import VaultDial, parse_instruction
+from puzzle import VaultDial, parse_instruction
 
 
 def test_vault_dial_initial_position():

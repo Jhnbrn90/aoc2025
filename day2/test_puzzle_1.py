@@ -1,6 +1,6 @@
 import pytest
 
-from puzzle import get_invalid_ids_from_range
+from puzzle_1 import get_invalid_ids_from_range
 
 
 @pytest.mark.parametrize('input_range,expected_invalid_ids', [
@@ -19,7 +19,7 @@ def test_get_invalid_ids_for_range(input_range, expected_invalid_ids):
 
 
 def test_parse_input_ids():
-    with open('day2/sample_input.txt') as f:
+    with open('sample_input.txt') as f:
         puzzle_input = f.read()
 
     input_id_ranges = puzzle_input.split(',')

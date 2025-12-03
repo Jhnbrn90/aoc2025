@@ -1,4 +1,4 @@
-from puzzle import get_invalid_ids_from_range
+from puzzle_1 import get_invalid_ids_from_range
 
 
 def main():

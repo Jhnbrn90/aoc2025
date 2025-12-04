@@ -1,3 +1,5 @@
+import time
+
 from day3_part1 import (
     max_joltage_from_battery_bank,
     parse_battery_string_to_bank_list,
@@ -11,6 +13,7 @@ from day3_part2 import (
 
 
 def main():
+    start = time.perf_counter()
     with open('day3/puzzle_input.txt') as f:
         puzzle_input = f.read()
 
@@ -31,7 +34,11 @@ def main():
         selected_batteries = select_batteries_from(battery_bank_list, select_amount)
         total_joltage += list_batteries_to_joltage(selected_batteries)
 
+    end = time.perf_counter()
+    elapsed_ms = (end-start) * 1000
+
     print(f"The total joltage: {total_joltage}")
+    print(f"Elpased: {elapsed_ms} ms.")
 
 
 if __name__ == "__main__":

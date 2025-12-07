@@ -5,24 +5,24 @@ from day6_1 import (
 )
 
 from day6_2 import (
-    calculate_right_left_problem,
+    calculate_problem_line,
     parse_input_string_to_grid as parse_grid_2,
 )
 
 
 
 def main():
-    with open('day6/sample_input.txt') as f:
+    with open('day6/puzzle_input.txt') as f:
         puzzle_input = f.read()
 
-    problem_grid = parse_grid_2(puzzle_input)
-    math_problem_lines = transpose_math_problem_matrix(problem_grid)
+    # Day 2
+    matrix = parse_grid_2(puzzle_input)
 
     total = 0
-    for math_problem_line in math_problem_lines:
-        total += calculate_right_left_problem(math_problem_line)
+    for row in matrix:
+        total += calculate_problem_line(row)
 
-    print(f"Total of math problems: {total}.")
+    print(f"Total of math problems: {total}")
 
 
 if __name__ == "__main__":

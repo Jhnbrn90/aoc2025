@@ -1,24 +1,30 @@
-import pprint
-
-from day7_1 import step_down_grid
-from day7_2 import walk_up_grid
+from functools import cache
 
 
 def main():
-    with open('day7/sample_input.txt') as f:
+    with open('day7/puzzle_input.txt') as f:
         puzzle_input = f.read()
     
     # Day 2
     grid = [list(c) for c in puzzle_input.split('\n') if c != '']
-    traversed_grid, split_count = step_down_grid(grid)
 
-    reversed_grid = traversed_grid[::-1]
+    @cache
+    def walk_grid(x, y):
+        if y >= len(grid):
+            # Fully walked route until the end
+            return 1
 
-    # Day 2
-    routes = walk_up_grid(reversed_grid)
-    assert False, sum(routes)
+        match grid[y][x]:
+            case '.' | 'S':
+                return walk_grid(x, y+1)
+            case '^':
+                return walk_grid(x-1, y) + walk_grid(x+1, y)
 
-    print(f"Timelines: {timelines}")
+    start_x = grid[0].index('S')
+
+    total_timelines = walk_grid(x=start_x, y=0)
+
+    print(f"Timelines: {total_timelines}")
 
 
 if __name__ == "__main__":

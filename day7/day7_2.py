@@ -1,43 +1,36 @@
-def step_down_grid(grid: list[list[str]], y: int = 0, overlaps: int = 0, split_count: int = 0):
-    """This time we're interested in which splitters are touched.
+import pprint
 
-    The total amount of options is calculated by 2^n, where `n` is the amount
-    of touched splitters.
-    """
-    # Check if we've reached the end
-    last_row = len(grid)-1
-    if y == last_row:
-        # we can't split the beam anymore
-        return grid, overlaps, split_count
+def walk_up_grid(grid: list[list[str]]):
+    routes = []
+    for x, character in enumerate(grid[0]):
+        if character == '|':
+            # Follow path(s) for this route to start
+            routes.append(follow_path(grid, x=x, y=0))
 
-    # Look at the columns of the current row
-    for x, character in enumerate(grid[y]):
-        match character:
-            case '.':
-                pass
-            case 'S':
-                # Start the beam directly below
-                grid[y+1][x] = '|'
-            case '^':
-                # Check if we have beam to split above (y-1)
-                if grid[y-1][x] == '|':
-                    split_count += 1
-                    # Draw new beams below, on (y+1, x-1) and (y+1, x+1)
-                    for x_split in (x-1, x+1):
-                        if grid[y+1][x_split] == '|':
-                            # If there is a beam already, we're double counting
-                            overlaps += 1 
-                        else:
-                            grid[y+1][x_split] = '|'
-            case '|':
-                # Check what is below the beam
-                if grid[y+1][x] == '.':
-                    # Prolongate beam
-                    grid[y+1][x] = '|'
-                
-                # If there is a splitter below the beam, it will be handled
-                # in the `case '^'` splitter case
-            case _:
-                raise ValueError(f"Other character encountered: {character}.")
+    return routes
 
-    return step_down_grid(grid, y+1, overlaps, split_count)
+
+def follow_path(grid, x, y):
+    """Return new coordinates to continue path."""
+    if y >= len(grid)-1:
+        return 1
+
+    # Move up the grid:
+    match grid[y+1][x]:
+        case '|' | 'S':
+            # Simply follow the beam
+            return follow_path(grid, x, y+1)
+        case '.':
+            # Two possibilities:
+            # - splitter on left side (y+1, x-1); OR
+            # - splitter on the right side (y+1, x+1)
+            if x-1 >= 0 and x < len(grid[y+1])-1:
+                if grid[y+1][x-1] == '^' and grid[y+1][x+1] == '^':
+                    return follow_path(grid, x-1, y+1) + follow_path(grid, x-1, y+1)
+            if x-1 >= 0:
+                if grid[y+1][x-1] == '^':
+                    return follow_path(grid, x-1, y+1)
+
+            if x+1 < len(grid[y+1])-1:
+                if grid[y+1][x+1] == '^':
+                        return follow_path(grid, x+1, y+1)

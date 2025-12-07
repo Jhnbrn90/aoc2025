@@ -1,19 +1,22 @@
 import pprint
 
-from day7_2 import step_down_grid
+from day7_1 import step_down_grid
+from day7_2 import walk_up_grid
 
 
 def main():
-    with open('day7/puzzle_input.txt') as f:
+    with open('day7/sample_input.txt') as f:
         puzzle_input = f.read()
     
     # Day 2
     grid = [list(c) for c in puzzle_input.split('\n') if c != '']
-    grid, overlaps, split_count = step_down_grid(grid)
+    traversed_grid, split_count = step_down_grid(grid)
 
-    routes = grid[-1].count('|')
+    reversed_grid = traversed_grid[::-1]
 
-    timelines = routes+overlaps+split_count
+    # Day 2
+    routes = walk_up_grid(reversed_grid)
+    assert False, sum(routes)
 
     print(f"Timelines: {timelines}")
 

@@ -1,20 +1,18 @@
 import pprint
 
-from day7_1 import step_down_grid
+from day7_2 import step_down_grid
 
 
 def main():
-    with open('day7/puzzle_input.txt') as f:
+    with open('day7/sample_input.txt') as f:
         puzzle_input = f.read()
     
-    # To grid
+    # Day 2
     grid = [list(c) for c in puzzle_input.split('\n') if c != '']
+    touched_splitters = set(step_down_grid(grid))
 
-    grid, split_count = step_down_grid(grid)
-
-    # pprint.pp(grid)
-
-    print(f"Split number of times: {split_count}")
+    amount_of_timelines = pow(2, len(touched_splitters))
+    print(f"Amount of possible timelines: {amount_of_timelines}")
 
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@ from day7_1 import step_down_grid
 
 
 def main():
-    with open('day7/sample_input.txt') as f:
+    with open('day7/puzzle_input.txt') as f:
         puzzle_input = f.read()
     
     # To grid
@@ -12,7 +12,7 @@ def main():
 
     grid, split_count = step_down_grid(grid)
 
-    pprint.pp(grid)
+    # pprint.pp(grid)
 
     print(f"Split number of times: {split_count}")
 

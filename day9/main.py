@@ -17,7 +17,8 @@ def main():
         coordinates.append(Tile(x=int(x), y=int(y)))
 
     distances = largest_euclidian_distances(coordinates)
-    largest_area = find_largest_area_n_distances(n=10, distances=distances, tiles=coordinates)
+    largest_area = find_largest_area_n_distances(n=10000, distances=distances, tiles=coordinates)
+
 
     print(f"Day9|1: largest area: {largest_area}")
 

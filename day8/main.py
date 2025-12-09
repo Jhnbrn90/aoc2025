@@ -8,6 +8,11 @@ from day8_1 import (
 )
 
 
+from day8_2 import (
+    connect_everything,
+)
+
+
 def main():
     with open('day8/puzzle_input.txt') as f:
         puzzle_input = f.read()
@@ -29,6 +34,17 @@ def main():
     product_of_largest = math.prod([size for _, size in largest_circuits])
 
     print(f"Day 1: largest circuits multiplied: {product_of_largest}.")
+
+    # Day 2- perform the connections and get indexes of the remaining nodes
+    i, j = connect_everything(
+        node_list=node_list,
+        distances=distances
+    )
+
+    # Calculate the answer
+    product_x_remaining_nodes = node_list[i].x * node_list[j].x
+
+    print(f"Day 2: remaining node x's multiplied: {product_x_remaining_nodes}")
 
 
 if __name__ == "__main__":

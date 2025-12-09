@@ -1,4 +1,6 @@
+from collections import Counter
 from dataclasses import dataclass
+
 
 @dataclass
 class Node:
@@ -6,7 +8,6 @@ class Node:
     x: int
     y: int
     z: int
-
 
 
 def calculate_squared_distance(p: Node, q: Node):
@@ -39,7 +40,7 @@ def parse_list_of_coordinates_to_node_list(input_list: list[str]) -> list[Node]:
     return node_list
 
 
-def node_list_to_distances(node_list: list[Node]) -> list[tuple[int, tuple[Node, Node]]]:
+def node_list_to_distances(node_list: list[Node]) -> list[tuple[int, tuple[int, int]]]:
     """Return node distances sorted on closest distance."""
     distances = []  # list of tuple of (distance, (node1, node2))
 
@@ -49,10 +50,48 @@ def node_list_to_distances(node_list: list[Node]) -> list[tuple[int, tuple[Node,
 
         # Calculate all the distances from the node_list for this point
         for j in range(i+1, len(node_list)):
-            next_node = node_list[j]
-
+            # Store tuples of distance and node indexes
             distances.append(
-                (calculate_squared_distance(node, next_node), (node, next_node))
+                (calculate_squared_distance(node_list[i], node_list[j]), (i, j))
             )
 
     return sorted(distances)
+
+
+def connect_n_shortest_distances(n: int, node_list: list[Node], distances: list[tuple[int, tuple[int, int]]]) -> dict[int, int]:
+    """Provide mapping of nodes to circuits, after connecting the `n` shortest nodes."""
+    # Map of nodes and to which circuit they belong to
+    circuit_map = {i: i for i, _ in enumerate(node_list)}
+
+    # Creating the connections, limited by `n`
+    for distance, (node_i, node_j) in distances[:n]:
+        # Scenario 1 - Both nodes are not belonging to a bigger circuit
+        if circuit_map[node_i] == node_i and circuit_map[node_j] == node_j:
+            # Update node_j to become part of the circuit of node_i
+            circuit_map[node_j] = circuit_map[node_i]
+
+        # Scenario 2 - Both nodes are already part of the same circuit
+        if circuit_map[node_i] == circuit_map[node_j]:
+            # Do nothing
+            continue
+        
+        # Scenario 3 - One or both nodes are part of another circuit
+        circuit_of_node_i = circuit_map[node_i]
+        circuit_of_node_j = circuit_map[node_j]
+        if circuit_of_node_i != node_i or circuit_of_node_j != node_j:
+            # All nodes become members of the same circuit
+            # Get all nodes of the circuit of j, and make them member of the circuit of node_i
+            # {1:1, 2:1, 3:1, 4: 5, 5: 5, 6:5}
+            
+            target_circuit = circuit_map[node_j]
+            for node_index, circuit in circuit_map.items():
+                if circuit == target_circuit:
+                    circuit_map[node_index] = circuit_map[node_i]
+
+    return circuit_map
+
+
+def get_n_largest_circuits(n: int, circuits: dict[int, int]) -> list[tuple[int, int]]:
+    """Find and return the `n` largest circuits."""
+    circuit_sizes = [x for x in circuits.values()]
+    return Counter(circuit_sizes).most_common(n)

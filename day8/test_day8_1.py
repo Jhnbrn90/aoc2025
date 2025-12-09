@@ -1,9 +1,12 @@
+import math
+
 from day8_1 import (
     calculate_squared_distance,
+    connect_n_shortest_distances,
+    get_n_largest_circuits,
     Node,
     node_list_to_distances,
     parse_list_of_coordinates_to_node_list,
-
 )
 
 
@@ -38,22 +41,72 @@ def test_sort_by_distance():
     node_list = parse_list_of_coordinates_to_node_list(puzzle_input)
     distances = node_list_to_distances(node_list)
 
-    assert distances[0] == (100427, (node_list[0], node_list[-1]))
+    assert distances[0] == (100427, (0, len(node_list)-1))
 
 
-def test_calculate_circuits():
+def test_connect_n_shortest_distances():
     with open('day8/sample_input.txt') as f:
         puzzle_input = f.read()
 
     node_list = parse_list_of_coordinates_to_node_list(puzzle_input)
+
+    # Sorted list of distances
     distances = node_list_to_distances(node_list)
 
-    circuits = {i: i for i, node in enumerate(node_list)}
+    # Perform the connections
+    circuits = connect_n_shortest_distances(
+        n=1,
+        node_list=node_list,
+        distances=distances
+    )
 
-    for n, (distance, (node1, node2)) in enumerate(distances):
+    # A circuit is formed between node 19 and 0: circuit 0
+    assert circuits == {
+        0: 0,
+        1: 1,
+        2: 2,
+        3: 3,
+        4: 4,
+        5: 5,
+        6: 6,
+        7: 7,
+        8: 8,
+        9: 9,
+        10: 10,
+        11: 11,
+        12: 12,
+        13: 13,
+        14: 14,
+        15: 15,
+        16: 16,
+        17: 17,
+        18: 18,
+        19: 0,
+    }
 
 
-        if n == 1000:
-            break
+def test_calculate_n_largest_circuits():
+    with open('day8/sample_input.txt') as f:
+        puzzle_input = f.read()
 
-    return
+    node_list = parse_list_of_coordinates_to_node_list(puzzle_input)
+
+    # Sorted list of distances
+    distances = node_list_to_distances(node_list)
+
+    # Perform the connections
+    circuits = connect_n_shortest_distances(
+        n=10,
+        node_list=node_list,
+        distances=distances
+    )
+
+    largest_circuits = get_n_largest_circuits(n=3, circuits=circuits)
+
+    assert largest_circuits == [
+        (2, 5),
+        (14, 4),
+        (9, 2),
+    ]
+
+    assert math.prod([size for _, size in largest_circuits]) == 40

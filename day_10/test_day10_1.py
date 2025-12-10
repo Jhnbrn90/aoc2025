@@ -1,12 +1,12 @@
 import pytest
 
-from itertools import permutations
 
 from day10_1 import (
     button_to_binary,
     parse_input_str_to_parts,
     Machine,
     apply_xor_to,
+    find_shortest_path,
 )
 
 
@@ -52,23 +52,27 @@ def test_button_to_binary_representation():
     assert binary_representation == expected
 
 
-def test_machine_alter_state_using_button():
+@pytest.mark.parametrize('button,expected_state', [
+    ('(1, 3)', '0101'),
+    ('(3)', '0001'),
+])
+def test_machine_alter_state_using_button(button: str, expected_state: str):
     machine = Machine('[.##.]')
     assert machine.current_state == '0000'
 
-    machine.push_button('(1, 3)')
+    machine.push_button(button)
 
-    assert machine.current_state == '0101'
+    assert machine.current_state == expected_state
 
 
-def test_apply_binary_xor():
-    current_state = '0110'
-    # add a class for the Machine (state?)
-
-    operation = '1111'
+@pytest.mark.parametrize('current_state,operation,expected', [
+    ('0110', '1111', '1001'),
+    ('0000', '0001', '0001'),
+])
+def test_apply_binary_xor(current_state: str, operation: str, expected: str):
     result = apply_xor_to(current_state, operation)
     
-    assert result == '1001'
+    assert result == expected
 
 
 def test_find_shortest_path_to_desired_state():
@@ -76,21 +80,23 @@ def test_find_shortest_path_to_desired_state():
     input_str = '[.##.] (3) (1,3) (2) (2,3) (0,2) (0,1) {3,5,4,7}'
 
     # When we prepare the machine
-    machine_str, buttons = parse_input_str_to_parts(input_str) 
+    machine_str, buttons = parse_input_str_to_parts(input_str)
     machine = Machine(machine_str)
 
-    # For all the possible permutations of pushing the buttons
-    buttons_reaching_desired_state = []
+    assert find_shortest_path(machine, buttons) == 2
 
-    for permutation in permutations(buttons):
-        buttons_pressed_permutation = []
-        for button in permutation:
-            buttons_pressed_permutation.append(button)
-            machine.push_button(button)
-            if machine.current_state == machine.desired_state:
-                buttons_reaching_desired_state.append(buttons_pressed_permutation)
-                print(f"Reached end state, using {len(buttons_pressed_permutation)} button presses.")
-                machine.reset()
-                break
 
-    assert False, buttons_reaching_desired_state
+def test_sample_input_shortest_path():
+    with open(f'day_10/sample_input.txt') as f:
+        puzzle_input = f.read().strip()
+
+    total_min_path = 0
+    for machine_input in puzzle_input.split("\n"):
+        machine_str, buttons = parse_input_str_to_parts(machine_input)
+
+        machine = Machine(machine_str)
+
+        total_min_path += find_shortest_path(machine, buttons)
+
+    assert total_min_path == 2 + 3 + 2
+

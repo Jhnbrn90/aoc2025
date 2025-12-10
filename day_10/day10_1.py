@@ -1,4 +1,7 @@
+from collections import defaultdict
 from functools import cache, cached_property
+from itertools import permutations
+
 
 
 def parse_input_str_to_parts(input_str: str) -> tuple[str, list[str]]:
@@ -37,6 +40,7 @@ class Machine:
         self.desired_state_str = desired_state
         # All machines start having all lights off
         self.current_state = '0' * len(self.desired_state)
+        self.pushed_buttons = []
 
     @cached_property
     def desired_state(self):
@@ -48,8 +52,10 @@ class Machine:
 
     def reset(self):
         self.current_state = '0' * len(self.desired_state)
+        self.pushed_buttons = []
 
     def push_button(self, button: str):
+        self.pushed_buttons.append(button)
         button_operation = button_to_binary(
             n_buttons=len(self.current_state),
             button_str=button,
@@ -60,5 +66,31 @@ class Machine:
 
         # Calculate padding if necessary
         padding = '0' * (len(self.current_state) - len(new_state))
-
         self.current_state = padding + new_state
+
+
+def find_shortest_path(machine: Machine, buttons: list[str]):
+    # For all the possible permutations of pushing the buttons
+    button_presses_reaching_desired_state = defaultdict(list)
+
+    for i, permutation in enumerate(permutations(buttons)):
+        # # If we've reached a desired state already
+        # if button_presses_reaching_desired_state:
+        #     # Skip the permutation if the first n buttons already
+        #     # reached the desired state, since we can't end up with
+        #     # less button presses.
+        #     current_minimum = min(list(map(len, button_presses_reaching_desired_state)))
+        #     if list(permutation[:current_minimum]) in button_presses_reaching_desired_state:
+        #         print(f'Skipping permutation: {permutation}')
+        #         continue
+        for button in permutation:
+            machine.push_button(button)
+
+            if machine.current_state == machine.desired_state:
+                buttons_pressed = machine.pushed_buttons
+                n_buttons_pressed = len(buttons_pressed)
+                button_presses_reaching_desired_state[n_buttons_pressed].append(buttons_pressed)
+                machine.reset()
+                break
+
+    return min(button_presses_reaching_desired_state.keys())

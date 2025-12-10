@@ -1,14 +1,11 @@
-from functools import cached_property
 import pytest
 
 
-def parse_input_str_to_parts(input_str: str) -> tuple[str, list[str]]:
-    str_parts = input_str.split(' ')
-
-    machine_part = str_parts.pop(0)  # first element ->  machine
-    joltage_part = str_parts.pop()  # last element -> joltage requirements
-
-    return machine_part, str_parts
+from day10_1 import (
+    parse_input_str_to_parts,
+    Machine,
+    apply_xor_to,
+)
 
 
 @pytest.mark.parametrize('input_str,machine,buttons', [
@@ -18,19 +15,6 @@ def test_parse_input_str_to_parts(input_str: str, machine: str, buttons: list[st
     result = parse_input_str_to_parts(input_str)
     
     assert result == (machine, buttons)
-
-
-class Machine:
-    def __init__(self, desired_state: str):
-        self.desired_state_str = desired_state
-
-    @cached_property
-    def desired_state(self):
-        # Remove '[' and ']'
-        desired_state = self.desired_state_str[1:-1]
-        desired_state = desired_state.replace('#', '1')
-        desired_state = desired_state.replace('.', '0')
-        return desired_state
 
 
 def test_machine_instance_internal_state():
@@ -44,10 +28,6 @@ def test_machine_instance_internal_state():
     # the binary representation
     assert machine.desired_state == '0110'
 
-
-def apply_xor_to(current_state: str, operation: str):
-    result = int(current_state, 2) ^ int(operation, 2)
-    return bin(result)[2:]  # skip '0b'
 
 def test_apply_binary_xor():
     current_state = '0110'

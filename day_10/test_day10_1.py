@@ -1,3 +1,4 @@
+from functools import cached_property
 import pytest
 
 
@@ -18,16 +19,30 @@ def test_parse_input_str_to_parts(input_str: str, machine: str, buttons: list[st
     
     assert result == (machine, buttons)
 
-def test_parse_machine_and_buttons_to_binary():
-    input_str = '[.##.] (3) (1,3) (2) (2,3) (0,2) (0,1) {3,5,4,7}'
 
-    machine, buttons = parse_input_str_to_binary(input_str)
+class Machine:
+    def __init__(self, desired_state: str):
+        self.desired_state_str = desired_state
 
-    assert machine == '0110'
-    assert buttons == [
-        '0001',
-    ]
+    @cached_property
+    def desired_state(self):
+        # Remove '[' and ']'
+        desired_state = self.desired_state_str[1:-1]
+        desired_state = desired_state.replace('#', '1')
+        desired_state = desired_state.replace('.', '0')
+        return desired_state
 
+
+def test_machine_instance_internal_state():
+    # Given we have a certain machine input string
+    machine_input_str = '[.##.]'
+
+    # When we instantiate the machine class
+    machine = Machine(machine_input_str)
+
+    # When we ask the desired state, it should match
+    # the binary representation
+    assert machine.desired_state == '0110'
 
 
 def apply_xor_to(current_state: str, operation: str):

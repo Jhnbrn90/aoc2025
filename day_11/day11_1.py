@@ -1,9 +1,8 @@
 from collections import defaultdict
-from functools import cache
 
 
-def get_device_map(device_input: str) -> dict[str, list]:
-    device_map = defaultdict(list)
+def get_device_map(device_input: str) -> dict[str, tuple]:
+    device_map = defaultdict(tuple)
 
     for device_line in device_input.split("\n"):
         elements = device_line.split(' ')

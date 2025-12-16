@@ -1,3 +1,4 @@
+from functools import cache
 from collections.abc import Sequence, Set
 from collections import defaultdict
 from itertools import combinations
@@ -56,7 +57,8 @@ def minimum_presses_reaching_state(desired_state: Wiring, patterns: dict[Wiring,
 def minimum_presses_reaching_joltages(target_joltages: list[int], patterns: dict[Wiring, list[Presses]]) -> int | None:
     
 
-    def get_minimum_presses(target_joltages: list[int]) -> int | None:
+    @cache
+    def get_minimum_presses(target_joltages: tuple[int, ...]) -> int | None:
         if not any(target_joltages):
             # if all joltages are 0, return 0
             return 0
@@ -95,7 +97,8 @@ def minimum_presses_reaching_joltages(target_joltages: list[int], patterns: dict
 
         return result
         
-    return get_minimum_presses(target_joltages)
+    # Make it a tuple, to support `cache()`
+    return get_minimum_presses(tuple(target_joltages))
 
 
 
